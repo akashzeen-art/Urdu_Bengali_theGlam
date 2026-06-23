@@ -15,7 +15,7 @@ export default function SubscriptionModal({ isOpen, onClose, onSubmit }: Subscri
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const mobile = (document.getElementById("mobileInput") as HTMLInputElement).value;
-    onSubmit(mobile);
+    onSubmit(`${t.subscription.countryCode}${mobile}`);
   };
 
   return (
@@ -35,19 +35,24 @@ export default function SubscriptionModal({ isOpen, onClose, onSubmit }: Subscri
             <label htmlFor="mobileInput" className="block text-gray-700 font-semibold mb-2">
               {t.subscription.label}
             </label>
-            <input
-              type="tel"
-              id="mobileInput"
-              placeholder={t.subscription.placeholder}
-              maxLength={10}
-              pattern="[0-9]{10}"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-              required
-              onInput={(e) => {
-                const target = e.target as HTMLInputElement;
-                target.value = target.value.replace(/[^0-9]/g, '').slice(0, 10);
-              }}
-            />
+            <div className="flex">
+              <span className="inline-flex items-center px-4 py-3 bg-gray-100 border border-r-0 border-gray-300 rounded-l-lg text-gray-700 font-semibold">
+                {t.subscription.countryCode}
+              </span>
+              <input
+                type="tel"
+                id="mobileInput"
+                placeholder={t.subscription.placeholder}
+                maxLength={11}
+                pattern="01[0-9]{9}"
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                required
+                onInput={(e) => {
+                  const target = e.target as HTMLInputElement;
+                  target.value = target.value.replace(/[^0-9]/g, "").slice(0, 11);
+                }}
+              />
+            </div>
           </div>
 
           <input type="hidden" id="txnid" value="" />

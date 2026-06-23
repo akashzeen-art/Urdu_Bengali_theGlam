@@ -13,7 +13,13 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 function getStoredLanguage(): Language {
   const stored = localStorage.getItem(STORAGE_KEY);
-  return stored === "bangla" ? "bangla" : "urdu";
+  if (stored === "english" || stored === "bangla") return stored;
+  if (stored === "urdu") {
+    localStorage.setItem(STORAGE_KEY, "bangla");
+    return "bangla";
+  }
+  localStorage.setItem(STORAGE_KEY, "bangla");
+  return "bangla";
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
@@ -25,7 +31,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    document.documentElement.lang = language === "bangla" ? "bn" : "ur";
+    document.documentElement.lang = language === "bangla" ? "bn" : "en";
   }, [language]);
 
   return (

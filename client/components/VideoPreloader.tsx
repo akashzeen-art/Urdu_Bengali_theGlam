@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface VideoPreloaderProps {
   isExiting?: boolean;
@@ -8,6 +9,7 @@ interface VideoPreloaderProps {
 
 //ok
 export default function VideoPreloader({ isExiting = false, onLogoTransition, isMobile = false }: VideoPreloaderProps) {
+  const { t } = useLanguage();
   const [progress, setProgress] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -127,7 +129,7 @@ export default function VideoPreloader({ isExiting = false, onLogoTransition, is
           }`}>
             <img
               src="/logo.png"
-              alt="TheGlam"
+              alt={t.preloader.logoAlt}
               className="w-58 h-58 object-contain drop-shadow-2xl"
             />
           </div>
@@ -137,7 +139,7 @@ export default function VideoPreloader({ isExiting = false, onLogoTransition, is
             isExiting ? "opacity-0" : "opacity-100"
           }`}>
             <p className="text-lg font-medium text-white/80 mb-6">
-              گرم جوش دیسی کنٹینٹ لوڈ ہو رہا ہے...
+              {t.preloader.loading}
             </p>
 
             {/* Progress bar */}

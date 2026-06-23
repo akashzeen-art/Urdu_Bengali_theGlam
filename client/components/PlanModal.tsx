@@ -24,17 +24,17 @@ export default function PlanModal({ isOpen, onClose, onSubmit, mobile, email, na
     }
   };
 
-  const formatPrice = (amount: number) => String(amount);
+  const formatPrice = (amount: number) => `${amount} ${t.plan.currency}`;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
       <div className="relative bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4 animate-fade-in">
         <form onSubmit={handleSubmit}>
           {/* Hidden display fields */}
-          <p id="mobileDisplay" className="hidden">موبائل: {mobile}</p>
-          <p id="txnidDisplay" className="hidden">ٹرانزیکشن آئی ڈی: {txnid}</p>
-          <p id="nameDisplay" className="hidden">نام: {name}</p>
-          <p id="emailDisplay" className="hidden">ای میل: {email}</p>
+          <p id="mobileDisplay" className="hidden">Mobile: {mobile}</p>
+          <p id="txnidDisplay" className="hidden">Txn ID: {txnid}</p>
+          <p id="nameDisplay" className="hidden">Name: {name}</p>
+          <p id="emailDisplay" className="hidden">Email: {email}</p>
 
           <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">{t.plan.title}</h3>
 

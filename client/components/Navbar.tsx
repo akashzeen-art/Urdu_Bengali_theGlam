@@ -27,14 +27,14 @@ export default function Navbar() {
             {/* Language Switcher */}
             <div className="flex items-center rounded-lg overflow-hidden border border-white/30">
               <button
-                onClick={() => setLanguage("urdu")}
+                onClick={() => setLanguage("english")}
                 className={`px-3 py-1.5 text-sm font-semibold transition-colors ${
-                  language === "urdu"
+                  language === "english"
                     ? "bg-purple-600 text-white"
                     : "bg-transparent text-white/80 hover:text-white hover:bg-white/10"
                 }`}
               >
-                اردو
+                English
               </button>
               <button
                 onClick={() => setLanguage("bangla")}
