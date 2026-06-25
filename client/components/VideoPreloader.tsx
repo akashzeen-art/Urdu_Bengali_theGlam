@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useLanguage } from "@/context/LanguageContext";
+import { BACKGROUND_VIDEOS } from "@/data/backgroundVideos";
 
 interface VideoPreloaderProps {
   isExiting?: boolean;
@@ -7,28 +8,36 @@ interface VideoPreloaderProps {
   isMobile?: boolean;
 }
 
-//ok
-export default function VideoPreloader({ isExiting = false, onLogoTransition, isMobile = false }: VideoPreloaderProps) {
+export default function VideoPreloader({ isExiting = false }: VideoPreloaderProps) {
   const { t } = useLanguage();
   const [progress, setProgress] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const playVideo = (video: HTMLVideoElement) => {
+    video.defaultMuted = true;
+    video.muted = true;
+    video.play().catch(() => {
+      const playOnInteraction = () => {
+        video.play();
+        document.removeEventListener("click", playOnInteraction);
+        document.removeEventListener("touchstart", playOnInteraction);
+      };
+      document.addEventListener("click", playOnInteraction);
+      document.addEventListener("touchstart", playOnInteraction);
+    });
+  };
 
   useEffect(() => {
     const video = videoRef.current;
     if (video) {
-      video.defaultMuted = true;
-      video.muted = true;
-      video.play().catch(() => {
-        const playOnInteraction = () => {
-          video.play();
-          document.removeEventListener('click', playOnInteraction);
-          document.removeEventListener('touchstart', playOnInteraction);
-        };
-        document.addEventListener('click', playOnInteraction);
-        document.addEventListener('touchstart', playOnInteraction);
-      });
+      playVideo(video);
     }
-  }, []);
+  }, [currentVideoIndex]);
+
+  const handleVideoEnded = () => {
+    setCurrentVideoIndex((prev) => (prev + 1) % BACKGROUND_VIDEOS.length);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -100,21 +109,16 @@ export default function VideoPreloader({ isExiting = false, onLogoTransition, is
         <div className="absolute inset-0 bg-black">
           <video
             ref={videoRef}
+            key={BACKGROUND_VIDEOS[currentVideoIndex]}
             autoPlay
             muted
-            loop
             playsInline
             preload="auto"
+            onEnded={handleVideoEnded}
             className="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto transform -translate-x-1/2 -translate-y-1/2"
             style={{ objectFit: "cover" }}
           >
-            <source
-              src={isMobile 
-                ? "https://vz-a2c5d962-9e6.b-cdn.net/8dccc254-d9b7-4476-bf4d-6d2638e9f248/play_480p.mp4"
-                : "https://vz-a2c5d962-9e6.b-cdn.net/8dccc254-d9b7-4476-bf4d-6d2638e9f248/play_480p.mp4"
-              }
-              type="video/mp4"
-            />
+            <source src={BACKGROUND_VIDEOS[currentVideoIndex]} type="video/mp4" />
           </video>
         </div>
 
